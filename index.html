@@ -237,13 +237,17 @@
     function closePayment() {
       paymentBox.style.display = 'none';
     }
+function pay(app) {
+  let upiId = "7774545245@ybl"; // replace with your real UPI ID
+  let upiLink = `upi://pay?pa=${upiId}&pn=The Stall&am=${total}&cu=INR`;
+  window.location.href = upiLink;
+}
 
-    function pay(app) {
-      alert(`Thank you! Please complete ₹${total} payment via ${app.toUpperCase()}.`);
-      paymentBox.style.display = 'none';
-    }
   </script>
 </body>
 </html>
+
+
+
 
 
