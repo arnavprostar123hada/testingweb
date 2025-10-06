@@ -1,266 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Stall Menu 🍹</title>
-<style>
-  /* ---------- BASE ---------- */
-  body {
-    font-family: "Times New Roman", serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, #fff8dc, #ffe680);
-    color: #2b1b00;
-    overflow-x: hidden;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Stall Menu</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      overflow-x: hidden;
+    }
 
-  header {
-    text-align: center;
-    background: linear-gradient(90deg, #ffcb2d, #f8b500);
-    padding: 20px 0;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    animation: slideDown 1s ease-out;
-  }
+    /* Background floating animation */
+    .bubble {
+      position: absolute;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      animation: float 10s infinite ease-in-out;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(-40px); opacity: 0.6; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
 
-  @keyframes slideDown {
-    from { transform: translateY(-100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
+    h1 {
+      text-align: center;
+      color: #333;
+      padding-top: 20px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #444;
+      margin-top: 30px;
+      text-align: center;
+      text-decoration: underline;
+    }
 
-  header h1 {
-    font-size: 26px;
-    color: #2d2d2d;
-    text-shadow: 1px 1px #fff;
-  }
+    .menu {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 500px;
+      margin: auto;
+    }
 
-  form {
-    padding: 20px;
-  }
+    .item {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transform: scale(0.95);
+      opacity: 0;
+      animation: popin 0.7s forwards;
+    }
 
-  h2 {
-    font-size: 22px;
-    text-align: center;
-    text-decoration: underline;
-    color: #4a2e00;
-    margin-top: 25px;
-    animation: fadeIn 1.2s ease-in;
-  }
+    @keyframes popin {
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
 
-  /* ---------- MENU ITEMS ---------- */
-  .menu-item {
-    background: white;
-    border-radius: 15px;
-    padding: 15px;
-    margin: 10px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: popUp 0.5s ease both;
-  }
+    .item label {
+      font-size: 1rem;
+      color: #333;
+      flex: 1;
+    }
 
-  .menu-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-  }
+    .item input {
+      transform: scale(1.4);
+      margin-right: 10px;
+    }
 
-  @keyframes popUp {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
+    #cart-summary {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #333;
+      color: white;
+      padding: 10px 15px;
+      text-align: center;
+      font-size: 1.1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
 
-  input[type="checkbox"] {
-    transform: scale(1.3);
-    accent-color: #4CAF50;
-    margin-right: 10px;
-  }
+    #cart-summary button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 15px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: 0.3s;
+    }
 
-  label {
-    flex: 1;
-    font-size: 18px;
-  }
+    #cart-summary button:hover {
+      background: #45a049;
+    }
 
-  span {
-    font-weight: bold;
-    color: #333;
-    font-size: 18px;
-  }
+    .payment-options {
+      display: none;
+      background: rgba(0,0,0,0.6);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+    }
 
-  /* ---------- SUMMARY BOX ---------- */
-  #summaryBox {
-    background: #fffbea;
-    border: 2px solid #f4d03f;
-    border-radius: 15px;
-    padding: 15px;
-    margin-top: 20px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-    animation: fadeInUp 0.8s ease;
-  }
+    .payment-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      width: 80%;
+      max-width: 300px;
+    }
 
-  #summaryBox h3 {
-    text-align: center;
-    color: #4a2e00;
-    margin-top: 0;
-  }
+    .payment-box h3 {
+      margin-bottom: 15px;
+    }
 
-  #summaryList {
-    font-size: 17px;
-    margin: 10px 0;
-    list-style-type: "🍴 ";
-  }
+    .pay-btn {
+      display: block;
+      margin: 8px auto;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: 0.3s;
+    }
 
-  #totalAmount {
-    font-weight: bold;
-    font-size: 20px;
-    text-align: right;
-    color: #1b5e20;
-  }
+    .pay-btn:hover { opacity: 0.9; }
 
-  /* ---------- BUTTON ---------- */
-  button {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    margin-top: 25px;
-    font-size: 20px;
-    font-family: "Times New Roman", serif;
-    border: none;
-    border-radius: 12px;
-    color: white;
-    background: linear-gradient(90deg, #4CAF50, #2e7d32);
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-    animation: fadeInUp 1s ease;
-  }
+    .gpay { background: #000; color: #fff; }
+    .paytm { background: #00b9f5; color: #fff; }
+    .phonepe { background: #5f259f; color: #fff; }
+    .bhim { background: #f58220; color: #fff; }
 
-  button:hover {
-    transform: scale(1.03);
-    background: linear-gradient(90deg, #2e7d32, #1b5e20);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-  }
-
-  @keyframes fadeInUp {
-    from { transform: translateY(30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  footer {
-    text-align: center;
-    padding: 15px;
-    color: #5a3d00;
-    background: #fff3cd;
-    font-size: 15px;
-    margin-top: 30px;
-    border-top: 1px solid #e6c700;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @media (max-width: 600px) {
-    header h1 { font-size: 22px; }
-    h2 { font-size: 20px; }
-    label, span { font-size: 16px; }
-    button { font-size: 18px; }
-  }
-</style>
+    @media (max-width: 600px) {
+      .item label { font-size: 0.95rem; }
+      #cart-summary { flex-direction: column; gap: 8px; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>🍨 Welcome to The Stall Menu 🍨</h1>
-</header>
+  <!-- Floating bubbles -->
+  <div class="bubble" style="width:40px; height:40px; left:10%; animation-delay:0s;"></div>
+  <div class="bubble" style="width:60px; height:60px; left:40%; animation-delay:2s;"></div>
+  <div class="bubble" style="width:50px; height:50px; left:70%; animation-delay:4s;"></div>
 
-<form id="menuForm">
+  <h1>🍹 The Stall Menu</h1>
+
   <h2>🥤 Milkshakes</h2>
-    <div class="menu-item"><label><input type="checkbox" value="Normal Banana" data-price="1">testing</label><span>₹1</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Normal Banana Milkshake" data-price="45">Normal Banana Milkshake</label><span>₹45</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Normal Apple Milkshake" data-price="50">Normal Apple Milkshake</label><span>₹50</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Coffee Banana Milkshake" data-price="60">Coffee Banana Milkshake</label><span>₹60</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Normal Chocolate Milkshake" data-price="60">Normal Chocolate Milkshake</label><span>₹60</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Dairy Milk Chocolate Milkshake" data-price="70">Dairy Milk Chocolate Milkshake</label><span>₹70</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Oreo Banana Milkshake" data-price="70">Oreo Banana Milkshake</label><span>₹70</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Oreo Chocolate Milkshake" data-price="75">Oreo Chocolate Milkshake</label><span>₹75</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Special Banana Milkshake" data-price="80">Special Banana Milkshake (Oreo + Coffee + Chocolate)</label><span>₹80</span></div>
-
-  <h2>🍴 Snacks</h2>
-  <div class="menu-item"><label><input type="checkbox" value="Pani Puri" data-price="40">Pani Puri</label><span>₹40</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Shev Puri" data-price="50">Shev Puri</label><span>₹50</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Veg Momos" data-price="60">Veg Momos</label><span>₹60</span></div>
-  <div class="menu-item"><label><input type="checkbox" value="Paneer Momos" data-price="70">Paneer Momos</label><span>₹70</span></div>
-
-  <div id="summaryBox" style="display:none;">
-    <h3>🧾 Order Summary</h3>
-    <ul id="summaryList"></ul>
-    <p id="totalAmount"></p>
+  <div class="menu" id="milkshakes">
+    <div class="item"><label><input type="checkbox" data-price="1">testing - ₹1</label></div>
+    <div class="item"><label><input type="checkbox" data-price="45">Normal Banana Milkshake - ₹45</label></div>
+    <div class="item"><label><input type="checkbox" data-price="50">Normal Apple Milkshake - ₹50</label></div>
+    <div class="item"><label><input type="checkbox" data-price="60">Coffee Banana Milkshake - ₹60</label></div>
+    <div class="item"><label><input type="checkbox" data-price="60">Normal Chocolate Milkshake - ₹60</label></div>
+    <div class="item"><label><input type="checkbox" data-price="70">Dairy-Milk Chocolate Milkshake - ₹70</label></div>
+    <div class="item"><label><input type="checkbox" data-price="70">Oreo Banana Milkshake - ₹70</label></div>
+    <div class="item"><label><input type="checkbox" data-price="75">Oreo Chocolate Milkshake - ₹75</label></div>
+    <div class="item"><label><input type="checkbox" data-price="80">Special Banana Milkshake - ₹80</label></div>
   </div>
 
-  <button type="submit">💳 Proceed to Pay</button>
-</form>
+  <h2>🍴 Snacks</h2>
+  <div class="menu" id="snacks">
+    <div class="item"><label><input type="checkbox" data-price="25">Pani Puri - ₹25</label></div>
+    <div class="item"><label><input type="checkbox" data-price="30">Shev Puri - ₹30</label></div>
+    <div class="item"><label><input type="checkbox" data-price="55">Veg Momos - ₹55</label></div>
+    <div class="item"><label><input type="checkbox" data-price="70">Paneer Momos - ₹70</label></div>
+  </div>
 
-<footer>© 2025 The Stall | Fresh. Fun. Fast. ✨</footer>
+  <div id="cart-summary">
+    <span id="cart-total">Total: ₹0</span>
+    <button id="checkout">Proceed to Pay</button>
+  </div>
 
-<script>
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  const summaryBox = document.getElementById('summaryBox');
-  const summaryList = document.getElementById('summaryList');
-  const totalAmount = document.getElementById('totalAmount');
+  <div class="payment-options" id="paymentOptions">
+    <div class="payment-box">
+      <h3>Select Payment App</h3>
+      <button class="pay-btn gpay" onclick="pay('gpay')">Google Pay</button>
+      <button class="pay-btn paytm" onclick="pay('paytm')">Paytm</button>
+      <button class="pay-btn phonepe" onclick="pay('phonepe')">PhonePe</button>
+      <button class="pay-btn bhim" onclick="pay('bhim')">BHIM UPI</button>
+      <button class="pay-btn" onclick="closePayment()" style="background:#ccc;">Cancel</button>
+    </div>
+  </div>
 
-  // Update summary in real-time
-  checkboxes.forEach(cb => {
-    cb.addEventListener('change', updateSummary);
-  });
-
-  function updateSummary() {
-    const selected = document.querySelectorAll('input[type="checkbox"]:checked');
-    if (selected.length === 0) {
-      summaryBox.style.display = 'none';
-      return;
-    }
-
-    summaryBox.style.display = 'block';
-    summaryList.innerHTML = '';
+  <script>
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const totalDisplay = document.getElementById('cart-total');
+    const paymentBox = document.getElementById('paymentOptions');
     let total = 0;
 
-    selected.forEach(item => {
-      const li = document.createElement('li');
-      li.textContent = `${item.value} - ₹${item.dataset.price}`;
-      summaryList.appendChild(li);
-      total += parseInt(item.dataset.price);
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        total = 0;
+        checkboxes.forEach(item => {
+          if (item.checked) total += parseInt(item.dataset.price);
+        });
+        totalDisplay.textContent = `Total: ₹${total}`;
+      });
     });
 
-    totalAmount.textContent = `Total: ₹${total}`;
-  }
+    document.getElementById('checkout').addEventListener('click', () => {
+      if (total === 0) {
+        alert('Please select at least one item.');
+        return;
+      }
+      paymentBox.style.display = 'flex';
+    });
 
-  // UPI Payment
-  document.getElementById("menuForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const selected = document.querySelectorAll('input[type="checkbox"]:checked');
-    if (selected.length === 0) {
-      alert("Please select at least one item!");
-      return;
+    function closePayment() {
+      paymentBox.style.display = 'none';
     }
 
-    let total = 0;
-    let items = [];
-    selected.forEach(item => {
-      total += parseInt(item.dataset.price);
-      items.push(item.value);
-    });
-
-    // Replace with your actual UPI ID
-    const upi = `upi://pay?pa=7774848245@ybl&pn=The Stall&am=${total}&cu=INR&tn=${encodeURIComponent(items.join(", "))}`;
-    window.location.href = upi;
-  });
-</script>
+    function pay(app) {
+      alert(`Thank you! Please complete ₹${total} payment via ${app.toUpperCase()}.`);
+      paymentBox.style.display = 'none';
+    }
+  </script>
 </body>
 </html>
+
 
